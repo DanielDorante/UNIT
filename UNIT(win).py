@@ -154,6 +154,32 @@ def uptime():
     else:
         os.system("uptime")
 
+def exit_program():
+    print("Goodbye, happy networking!")
+    sys.exit(0)
+
+def get_command_map():
+    """
+    Hash map for storing user inputs to actual command functions.
+    This implements a switch-state pattern for cleaner command dispatch.
+    """
+    return {
+        "1": ping,
+        "2": traceroute,
+        "3": ip_config,
+        "4": custom_ping,
+        "5": dns_lookup,
+        "6": reverse_dns,
+        "7": whois_lookup,
+        "8": get_public_ip,
+        "9": port_scanner,
+        "10": save_favorite,
+        "11": show_favorites,
+        "12": system_info,
+        "13": uptime,
+        "14": exit_program
+    }
+
 def menu():
     print("""
 [1] Ping the Internet
@@ -174,38 +200,17 @@ def menu():
 
 def main():
     print(ascii_art)
+    command_map = get_command_map()
+    
     while True:
         menu()
         choice = input("Select an option: ").strip()
-        if choice == "1":
-            ping()
-        elif choice == "2":
-            traceroute()
-        elif choice == "3":
-            ip_config()
-        elif choice == "4":
-            custom_ping()
-        elif choice == "5":
-            dns_lookup()
-        elif choice == "6":
-            reverse_dns()
-        elif choice == "7":
-            whois_lookup()
-        elif choice == "8":
-            get_public_ip()
-        elif choice == "9":
-            port_scanner()
-        elif choice == "10":
-            save_favorite()
-        elif choice == "11":
-            show_favorites()
-        elif choice == "12":
-            system_info()
-        elif choice == "13":
-            uptime()
-        elif choice == "14":
-            print("Goodbye, happy networking!")
-            sys.exit(0)
+        
+        # Use hash map lookup instead of if-elif chain (switch state pattern)
+        command_func = command_map.get(choice)
+        
+        if command_func:
+            command_func()
         else:
             print("Invalid choice. Please try again.")
 
